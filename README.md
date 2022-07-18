@@ -16,7 +16,7 @@ Twilio Flex allows you to customise elements of your agent UI programatically us
 The plugin has the capability to save and retrieve themes for users within Twilio flex, if there is not a theme for the current user the plugin will attempt to find a theme named 'default' if this does not exist, no theme overrides will be added.
 
 ## Persistance Layer
-Saving and rereiving is fulfilled via API calls, `/src/API/ImanageTheme.ts` contains an interface that defines the contract required for the persistance service to use. Included in the plugin is an implementation for Google Firebase Realtime Database. However if you would like to bring your own please:
+Saving and rereiving is fulfilled via API calls, `/src/API/ImanageTheme.ts` contains an interface that defines the contract required for the persistance service to use. Included in the plugin is an implementation for Google Firebase Realtime Database. However if you would like to bring your own you should:
 
 1. Create your own class that implements `IManageThemes.ts`
 2. In the file `/src/CreateThemePlugin.tsx` replace the value of `persistanceLayerImplementation` with an instance of your newly created class
