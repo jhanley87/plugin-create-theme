@@ -10,7 +10,7 @@ Twilio Flex allows you to customise elements of your agent UI programatically us
 - Dark/Light base theme
 - Icon
 
-![](./assets/plugin-main.png)
+![](./assets/plugin-main.gif)
 
 ## Conventions
 The plugin has the capability to save and retrieve themes for users within Twilio flex, if there is not a theme for the current user the plugin will attempt to find a theme named 'default' if this does not exist, no theme overrides will be added.
