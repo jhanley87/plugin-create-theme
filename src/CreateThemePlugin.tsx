@@ -24,7 +24,9 @@ export default class CreateThemePlugin extends FlexPlugin {
   async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {
     const options: Flex.ContentFragmentProps = { sortOrder: -1 };
 
-    var themeService = new ThemeService(new FirebaseThemeManager());
+    var persistanceLayerImplementation = new FirebaseThemeManager()
+
+    var themeService = new ThemeService(persistanceLayerImplementation);
 
     //load the theme initially if the component isnt loaded
     themeService.getAllThemes().then((themes) => {

@@ -1,31 +1,24 @@
-# Your custom Twilio Flex Plugin
+# Twilio Flex UI 2.0 Theme Generator
+## Introduction
+Twilio Flex allows you to customise elements of your agent UI programatically using the [theme configuration](https://assets.flex.twilio.com/docs/releases/flex-ui/2.0.0-beta.1/theming/Theme). This plugin creates a UI that will allow users to customise the following theme elements:
 
-Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
+- Header Background Color
+- Header Button Hover Color
+- Side Nav Color
+- Side Nav Button Hover Color
+- Side Nav Icon Colors 
+- Dark/Light base theme
+- Icon
 
-## Setup
+![](./assets/plugin-main.png)
 
-Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com). We support Node >= 10.12 (and recommend the _even_ versions of Node). Afterwards, install the dependencies by running `npm install`:
+## Conventions
+The plugin has the capability to save and retrieve themes for users within Twilio flex, if there is not a theme for the current user the plugin will attempt to find a theme named 'default' if this does not exist, no theme overrides will be added.
 
-```bash
-cd 
+## Persistance Layer
+Saving and rereiving is fulfilled via API calls, `/src/API/ImanageTheme.ts` contains an interface that defines the contract required for the persistance service to use. Included in the plugin is an implementation for Google Firebase Realtime Database. However if you would like to bring your own please:
 
-# If you use npm
-npm install
-```
+1. Create your own class that implements `IManageThemes.ts`
+2. In the file `/src/CreateThemePlugin.tsx` replace the value of `persistanceLayerImplementation` with an instance of your newly created class
 
-Next, please install the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) by running:
-
-```bash
-brew tap twilio/brew && brew install twilio
-```
-
-Finally, install the [Flex Plugin extension](https://github.com/twilio-labs/plugin-flex/tree/v1-beta) for the Twilio CLI:
-
-```bash
-twilio plugins:install @twilio-labs/plugin-flex
-```
-
-## Development
-
-Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
-
+This will then be passed as a property to the componenent itselfand your new implementation will be used.
