@@ -28,33 +28,38 @@ export default class CreateThemePlugin extends FlexPlugin {
 
     let themeService = new ThemeService(persistanceLayerImplementation);
 
-    let themes = await themeService.getAllThemes();
-    let userThemeInfo = await themeService.getUsersActiveTheme(
-      Flex.Manager.getInstance().workerClient?.sid ?? ""
-    );
-
-    if (themes) {
-      //try to load the workers theme
-      if (userThemeInfo && userThemeInfo.activeTheme) {
-        themeService.setThemeOverrides(themes[userThemeInfo.activeTheme]);
+    try{
+      let themes = await themeService.getAllThemes();
+      let userThemeInfo = await themeService.getUsersActiveTheme(
+        Flex.Manager.getInstance().workerClient?.sid ?? ""
+      );
+  
+      if (themes) {
+        //try to load the workers theme
+        if (userThemeInfo && userThemeInfo.activeTheme) {
+          themeService.setThemeOverrides(themes[userThemeInfo.activeTheme]);
+        }
+        //else try load default theme
+        else if (themes["default"]) {
+          themeService.setThemeOverrides(themes["default"]);
+        }
       }
-      //else try load default theme
-      else if (themes["default"]) {
-        themeService.setThemeOverrides(themes["default"]);
-      }
+  
+      //add the button to the sidebar that will navigate to the theme creator view
+      flex.SideNav.Content.add(<SideBarButton key="theme-config-button" />);
+      
+      //Add the theme creator view
+      flex.ViewCollection.Content.add(
+        <View name="theme-config" key="theme-config-view">
+          <ThemeConfigurationPanel
+            themeService={themeService}
+            key="theme-config-panel"
+          />
+        </View>
+      );
     }
-
-    //add the button to the sidebar that will navigate to the theme creator view
-    flex.SideNav.Content.add(<SideBarButton key="theme-config-button" />);
-    
-    //Add the theme creator view
-    flex.ViewCollection.Content.add(
-      <View name="theme-config" key="theme-config-view">
-        <ThemeConfigurationPanel
-          themeService={themeService}
-          key="theme-config-panel"
-        />
-      </View>
-    );
+    catch(error) {
+      console.error("Error when loading theme service", error);
+    }
   }
 }
