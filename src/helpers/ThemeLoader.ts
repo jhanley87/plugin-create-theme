@@ -1,5 +1,7 @@
-import IOverrideTheme from "../Types/IOverrideTheme"
+//Packages
 import * as Flex from "@twilio/flex-ui";
+//Components
+import IOverrideTheme from "../Types/IOverrideTheme"
 import IManageThemes from "../API/IManageThemes";
 
 export default class ThemeService {
@@ -9,24 +11,10 @@ export default class ThemeService {
     return await this._apiClient.getAllThemesAsync();
   };
 
-  getUsersActiveTheme = (userId: string) => {
-    return this._apiClient.getUsersActiveThemeAsync(userId);
+  getUsersActiveTheme = async (userId: string) => {
+    return await this._apiClient.getUsersActiveThemeAsync(userId);
   };
-
-  loadThemeForUser = (userId: string) => {
-    if (isNullOrWhitespace(userId)) return;
-
-    this._apiClient.getAllThemesAsync().then((themes) => {
-      this._apiClient
-        .getUsersActiveThemeAsync(Flex.Manager.getInstance().workerClient?.sid ?? "")
-        .then((userInfo) => {
-          if (themes && userInfo && userInfo.activeTheme) {
-            var usersTheme = themes[userInfo.activeTheme];
-            this.setThemeOverrides(usersTheme);
-          }
-        });
-    });
-  };
+  
   setThemeOverrides = (overrides: IOverrideTheme) => {
     const theme = Flex.Manager.getInstance().configuration.theme;
 
@@ -44,7 +32,7 @@ export default class ThemeService {
 
   saveTheme = async (themeOverrides: IOverrideTheme) => {
     if (themeOverrides.name && !isNullOrWhitespace(themeOverrides.name)) {
-      var worker = Flex.Manager.getInstance().workerClient?.sid;
+      let worker = Flex.Manager.getInstance().workerClient?.sid;
 
       if (!worker) return;
 

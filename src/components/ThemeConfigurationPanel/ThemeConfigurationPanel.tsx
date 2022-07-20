@@ -1,6 +1,6 @@
+//Packages
 import { Box } from "@twilio-paste/core/box";
 import { Theme } from "@twilio-paste/core/theme";
-import { useUID } from "react-uid";
 import React, { useEffect, useState } from "react";
 import {
   Grid,
@@ -14,10 +14,11 @@ import {
   Select,
   Option,
 } from "@twilio-paste/core";
+import { Button, ThemeConfigProps } from "@twilio/flex-ui";
 import * as Flex from "@twilio/flex-ui";
+//Components
 import { ColorPicker } from "../ColorPicker/ColorPicker";
 import IOverrideTheme from "../../Types/IOverrideTheme";
-import { Button, ThemeConfigProps } from "@twilio/flex-ui";
 import ThemeService, { isNullOrWhitespace } from "../../helpers/ThemeLoader";
 
 export interface IThemeConfigPanelProps {
@@ -37,6 +38,14 @@ export const ThemeConfigurationPanel = (props: IThemeConfigPanelProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    setThemeState(activeThemeName);
+  }, [activeThemeName]);
+
+  useEffect(() => {
+    props.themeService.setThemeOverrides(overrides);
+  }, [overrides, activeThemeName]);
+
   const init = async () => {
     var workerId = Flex.Manager.getInstance().workerClient?.sid;
     var themes = await props.themeService.getAllThemes();
@@ -52,14 +61,11 @@ export const ThemeConfigurationPanel = (props: IThemeConfigPanelProps) => {
         if (themes[userThemeInfo.activeTheme])
           setOverrides({ ...overrides, ...themes[userThemeInfo.activeTheme] });
 
-        setActiveThemeName(userThemeInfo.activeTheme ?? "");
+        const activeThemeName = userThemeInfo.activeTheme ?? "";
+        setActiveThemeName(activeThemeName);
       }
     }
   };
-
-  useEffect(() => {
-    props.themeService.setThemeOverrides(overrides);
-  }, [overrides, activeThemeName]);
 
   const setThemeState = (key: string) => {
     if (isNullOrWhitespace(key)) return;
@@ -68,10 +74,6 @@ export const ThemeConfigurationPanel = (props: IThemeConfigPanelProps) => {
 
     setOverrides({ ...overrides, ...selectedThemeOverride });
   };
-
-  useEffect(() => {
-    setThemeState(activeThemeName);
-  }, [activeThemeName]);
 
   const saveTheme = async () => {
     setOverrides({ ...overrides, name: activeThemeName });
@@ -159,14 +161,14 @@ export const ThemeConfigurationPanel = (props: IThemeConfigPanelProps) => {
                     }
                   >
                     <Radio
-                      id={useUID()}
+                      id={"light"}
                       value="light"
                       name="uncontrolled-radio-group"
                     >
                       Light
                     </Radio>
                     <Radio
-                      id={useUID()}
+                      id={"dark"}
                       value="dark"
                       name="uncontrolled-radio-group"
                     >
